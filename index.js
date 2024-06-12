@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GitHub Issues/Pull Request Default Filters
 // @namespace    https://github.com/
-// @version      2024-06-12
+// @version      1.0.1
 // @author       derpierre65
 // @description  Add two buttons - one to save the current filters as default and another to reset the filters to default for the issue or pull request list.
 // @match        https://github.com/*
@@ -65,7 +65,7 @@
         const resetButton = document.querySelector('.gh-filter-reset');
         if ( resetButton ) return;
 
-        const newButton = createButton(document.querySelector('.gh-filter-save'), 'gh-filter-reset', 'Reset');
+        const newButton = createButton(document.querySelector('.gh-filter-save'), 'gh-filter-reset', 'Reset Default');
         newButton.onclick = () => {
             GM_deleteValue(getStorageKey());
             newButton.remove();
@@ -99,6 +99,9 @@
         if ( !defaultFilter ) {
             return;
         }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        if ( urlParams.get('q').trim() !== defaultFilter.trim() ) return;
 
         element.value = defaultFilter;
 
